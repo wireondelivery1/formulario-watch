@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Thank You</title>
+  <style>
+    body {
+      background-color: #0d0d0d;
+      color: white;
+      font-family: 'Roboto', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      text-align: center;
+      padding: 20px;
+      flex-direction: column;
+    }
+
+    .btn-back {
+      margin-top: 30px;
+      padding: 12px 24px;
+      background-color: white;
+      color: #0d0d0d;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background 0.3s ease;
+    }
+
+    .btn-back:hover {
+      background-color: #dddddd;
+    }
+
+    .social-section {
+      margin-top: 40px;
+    }
+
+    .social-section p {
+      margin-bottom: 12px;
+      font-size: 16px;
+    }
+
+    .instagram-icon {
+      width: 36px;
+      height: 36px;
+      transition: opacity 0.3s ease;
+    }
+
+    .instagram-link:hover .instagram-icon {
+      opacity: 0.7;
+    }
+  </style>
+</head>
+<body>
+  <div>
+    <h1>Thank you!</h1>
+    <p>Your information has been successfully submitted.</p>
+    <button class="btn-back" onclick="history.back()">Return to Form</button>
+
+    <div class="social-section">
+      <p>Don't forget to follow us on our social media</p>
+      <a href="https://www.instagram.com/wireondelivery/" class="instagram-link" target="_blank" rel="noopener noreferrer">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" alt="Instagram" class="instagram-icon" />
+      </a>
+    </div>
+  </div>
+</body>
+</html>
+
