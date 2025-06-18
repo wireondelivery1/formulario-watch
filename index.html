@@ -150,28 +150,50 @@
   }
 
   document.addEventListener("DOMContentLoaded", function () {
+    const form = document.getElementById("watch-sell-form");
+
+    // Mostrar campo de Instagram si marca checkbox
     const joinCheckbox = document.getElementById("join-community-checkbox");
     const instaField = document.getElementById("instagram-field");
-
     joinCheckbox.addEventListener("change", function () {
       instaField.style.display = this.checked ? "block" : "none";
     });
-  });
-</script>
-<script>
-  document.addEventListener("DOMContentLoaded", function () {
-    const form = document.getElementById("watch-sell-form");
-    const checkboxes = document.querySelectorAll('#complete-set-group input[type="checkbox"]');
 
     form.addEventListener("submit", function (e) {
-      const oneChecked = Array.from(checkboxes).some(checkbox => checkbox.checked);
-      if (!oneChecked) {
-        e.preventDefault(); // Esto sí se necesita si no hay selección
+      e.preventDefault();
+
+      // Validar al menos un checkbox
+      const checkboxes = document.querySelectorAll('#complete-set-group input[type="checkbox"]');
+      const selectedBoxes = Array.from(checkboxes).filter(cb => cb.checked).map(cb => cb.value);
+      if (selectedBoxes.length === 0) {
         alert("Please select at least one option in the 'Complete Set' section.");
+        return;
       }
+
+      const formData = new FormData(form);
+
+      // Agregar valores de checkbox correctamente
+      selectedBoxes.forEach(value => {
+        formData.append("complete_set[]", value);
+      });
+
+      fetch("https://script.google.com/macros/s/AKfycbxtxTcC0s9Tu0DvP8uEdxdzeeQp3suQ3xXjGSUp91rMHHeL9NMHJOTrOGbUzXEBtCbg/exec", {
+        method: "POST",
+        body: formData
+      })
+      .then(res => {
+        if (res.ok) {
+          window.location.href = "thank-you.html";
+        } else {
+          alert("Something went wrong. Please try again.");
+        }
+      })
+      .catch(err => {
+        console.error("Submission error:", err);
+        alert("There was an error. Please try again.");
+      });
     });
   });
 </script>
-
 </body>
 </html>
