@@ -158,7 +158,20 @@
     });
   });
 </script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const form = document.getElementById("watch-sell-form");
+    const checkboxes = document.querySelectorAll('#complete-set-group input[type="checkbox"]');
+
+    form.addEventListener("submit", function (e) {
+      const oneChecked = Array.from(checkboxes).some(checkbox => checkbox.checked);
+      if (!oneChecked) {
+        e.preventDefault(); // Esto sí se necesita si no hay selección
+        alert("Please select at least one option in the 'Complete Set' section.");
+      }
+    });
+  });
+</script>
 
 </body>
 </html>
-
