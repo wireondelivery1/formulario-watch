@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <meta name="robots" content="noindex, nofollow" />
   <title>Sell Your Watch</title>
   <link rel="stylesheet" href="style.css" />
@@ -11,7 +11,6 @@
 <body>
   <div class="form-container">
     <form id="watch-sell-form" enctype="multipart/form-data">
-      <!-- Fields -->
       <label>Name and Last Name</label>
       <input type="text" name="full_name" required />
 
@@ -31,11 +30,23 @@
       <label>Model</label>
       <select name="model" id="model-select" required onchange="toggleOtherModel()">
         <option value="">Select</option>
+        <option>Cosmograph Daytona</option>
+        <option>Datejust</option>
+        <option>Lady‌‎-Datejust</option>
+        <option>Day‌‎-Date</option>
+        <option>Explorer</option>
+        <option>Explorer II</option>
+        <option>GMT‌‎-Master II</option>
+        <option>Submariner</option>
+        <option>Sea‌‎-Dweller</option>
+        <option>Deepsea</option>
+        <option>Yacht‌‎-Master</option>
+        <option>Sky‌‎-Dweller</option>
         <option>Oyster Perpetual</option>
         <option value="Other">Other</option>
       </select>
 
-      <div id="other-model-container" style="display:none;">
+      <div id="other-model-container" style="display:none; margin-top: 10px;">
         <label>Please specify model</label>
         <input type="text" name="other_model" />
       </div>
@@ -46,6 +57,18 @@
       <label>Year</label>
       <select name="year" required>
         <option value="">Select</option>
+        <option>2011</option>
+        <option>2012</option>
+        <option>2013</option>
+        <option>2014</option>
+        <option>2015</option>
+        <option>2016</option>
+        <option>2017</option>
+        <option>2018</option>
+        <option>2019</option>
+        <option>2020</option>
+        <option>2021</option>
+        <option>2022</option>
         <option>2023</option>
         <option>2024</option>
         <option>2025</option>
@@ -58,6 +81,10 @@
         <label><input type="checkbox" value="Warranty Card" /> Warranty Card</label>
         <label><input type="checkbox" value="Booklet & Holder" /> Booklet & Holder</label>
         <label><input type="checkbox" value="Warranty Manual" /> Warranty Manual</label>
+        <label><input type="checkbox" value="Green Tag" /> Green Tag</label>
+        <label><input type="checkbox" value="White Tag" /> White Tag</label>
+        <label><input type="checkbox" value="Full Links" /> Full Links</label>
+        <label><input type="checkbox" value="Watch Only" /> Watch Only</label>
       </div>
 
       <label>Condition</label>
@@ -65,51 +92,103 @@
         <option value="">Select</option>
         <option>Brand New Unused</option>
         <option>Mint/Slider</option>
+        <option>Lightly Used (- 10 times)</option>
+        <option>Used</option>
       </select>
 
       <label>Asking Price</label>
-      <input name="asking_price" required />
+      <textarea name="asking_price" required placeholder="Please let us know how much you're looking to sell this watch for" style="color: white; background-color: transparent;"></textarea>
 
-      <label>Upload Photos</label>
-      <input type="file" name="photos" accept="image/*" multiple required />
+      <label>Upload Photos of watch and set (max 10)</label>
+      <small style="color: #bbb; display: block; margin-bottom: 5px;">
+        Only image files are accepted (.jpg, .jpeg, .png, .webp)
+      </small>
+      <input 
+        type="file" 
+        name="photos[]" 
+        accept="image/jpeg, image/jpg, image/png, image/webp" 
+        multiple 
+        required 
+        onchange="validateImages(this)" 
+      />
 
-      <label>Instagram</label>
-      <input type="text" name="instagram_username" />
+      <div style="margin-top: 20px;">
+        <label>
+          <input type="checkbox" id="join-community-checkbox" />
+          Would you like to join our community?
+        </label>
+        <p style="font-size: 0.9em; color: #bbb; margin-top: 5px;">
+          Be the first to receive exclusive offers, updates, and insider news about luxury watches.
+        </p>
 
-      <button type="submit">Send</button>
+        <div id="instagram-field" style="display: none; margin-top: 10px;">
+          <label>Enter your Instagram username</label>
+          <input type="text" name="instagram_username" placeholder="@example" style="color: white; background-color: transparent; font-style: italic;"/>
+        </div>
+      </div>
+
+      <button type="submit">Send Watch Info</button>
     </form>
   </div>
 
 <script>
-document.addEventListener("DOMContentLoaded", function () {
-  const form = document.getElementById("watch-sell-form");
+  function toggleOtherModel() {
+    const modelSelect = document.getElementById('model-select');
+    const otherField = document.getElementById('other-model-container');
+    otherField.style.display = modelSelect.value === 'Other' ? 'block' : 'none';
+  }
 
-  form.addEventListener("submit", async function (e) {
-    e.preventDefault();
+  function validateImages(input) {
+    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+    for (const file of input.files) {
+      if (!allowedTypes.includes(file.type)) {
+        alert('Only image files are allowed (JPEG, PNG, WEBP).');
+        input.value = '';
+        break;
+      }
+    }
+  }
 
-    const formData = new FormData(form);
-
+  document.addEventListener("DOMContentLoaded", function () {
+    const form = document.getElementById("watch-sell-form");
     const checkboxes = document.querySelectorAll('#complete-set-group input[type="checkbox"]');
-    const selected = Array.from(checkboxes).filter(c => c.checked).map(c => c.value);
-    formData.append("complete_set_joined", selected.join(", "));
 
-    const response = await fetch("https://script.google.com/macros/s/AKfycbxtxTcC0s9Tu0DvP8uEdxdzeeQp3suQ3xXjGSUp91rMHHeL9NMHJOTrOGbUzXEBtCbg/exec", {
-      method: "POST",
-      body: formData
+    const joinCheckbox = document.getElementById("join-community-checkbox");
+    const instaField = document.getElementById("instagram-field");
+    joinCheckbox.addEventListener("change", function () {
+      instaField.style.display = this.checked ? "block" : "none";
     });
 
-    const text = await response.text();
-    if (text.includes("window.location.href")) {
-      document.write(text);
-    } else {
-      alert("Unexpected response: " + text);
-    }
-  });
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
 
-  function toggleOtherModel() {
-    document.getElementById('other-model-container').style.display = document.getElementById('model-select').value === 'Other' ? 'block' : 'none';
-  }
-});
+      const selected = Array.from(checkboxes)
+        .filter(checkbox => checkbox.checked)
+        .map(checkbox => checkbox.value);
+
+      if (selected.length === 0) {
+        alert("Please select at least one option in the 'Complete Set' section.");
+        return;
+      }
+
+      const formData = new FormData(form);
+      formData.append("complete_set_joined", selected.join(", "));
+
+      fetch("https://script.google.com/macros/s/AKfycbxtxTcC0s9Tu0DvP8uEdxdzeeQp3suQ3xXjGSUp91rMHHeL9NMHJOTrOGbUzXEBtCbg/exec", {
+        method: "POST",
+        body: formData
+      })
+      .then(response => response.text())
+      .then(text => {
+        if (text.includes("window.location.href")) {
+          document.write(text);
+        } else {
+          alert("Unexpected response: " + text);
+        }
+      })
+      .catch(() => alert("Something went wrong. Please try again."));
+    });
+  });
 </script>
 </body>
 </html>
