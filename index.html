@@ -135,7 +135,7 @@
 document.addEventListener("DOMContentLoaded", function () {
   const form = document.getElementById("watch-sell-form");
 
-  form.addEventListener("submit", async function (e) {
+  form.addEventListener("submit", function (e) {
     e.preventDefault();
 
     const checkboxes = document.querySelectorAll('#complete-set-group input[type="checkbox"]');
@@ -146,51 +146,21 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     const formData = new FormData(form);
-    const data = {};
-    formData.forEach((value, key) => {
-      if (data[key]) {
-        data[key] = [].concat(data[key], value);
-      } else {
-        data[key] = value;
-      }
-    });
-
-    const files = formData.getAll("photos[]");
-    data.fileCount = files.length;
-
-    for (let i = 0; i < files.length; i++) {
-      const file = files[i];
-      const base64 = await toBase64(file);
-      data[`file${i}`] = base64.split(",")[1];
-      data[`fileName${i}`] = file.name;
-      data[`fileType${i}`] = file.type;
-    }
-
-    const encoded = new URLSearchParams();
-    for (const key in data) {
-      if (Array.isArray(data[key])) {
-        data[key].forEach(val => encoded.append(key, val));
-      } else {
-        encoded.append(key, data[key]);
-      }
-    }
 
     fetch("https://script.google.com/macros/s/AKfycbxtxTcC0s9Tu0DvP8uEdxdzeeQp3suQ3xXjGSUp91rMHHeL9NMHJOTrOGbUzXEBtCbg/exec", {
       method: "POST",
-      body: encoded
+      body: formData
     })
-    .then(() => window.location.href = "thank-you.html")
+    .then(response => response.text())
+    .then(text => {
+      if (text.includes("window.location.href")) {
+        document.write(text); // Redirige correctamente
+      } else {
+        alert("Unexpected response: " + text);
+      }
+    })
     .catch(() => alert("Something went wrong. Please try again."));
   });
-
-  function toBase64(file) {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => resolve(reader.result);
-      reader.onerror = error => reject(error);
-    });
-  }
 
   const joinCheckbox = document.getElementById("join-community-checkbox");
   const instaField = document.getElementById("instagram-field");
@@ -199,5 +169,6 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 });
 </script>
+
 </body>
 </html>
